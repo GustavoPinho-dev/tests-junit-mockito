@@ -4,6 +4,7 @@ import br.com.godh.apitests.entities.User;
 import br.com.godh.apitests.entities.dto.UserDTO;
 import br.com.godh.apitests.repositories.UserRepository;
 import br.com.godh.apitests.services.UserService;
+import br.com.godh.apitests.services.exceptions.DataIntegrityViolationException;
 import br.com.godh.apitests.services.exceptions.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(UserDTO obj) {
+        findByEmail(obj);
         return repository.save(mapper.map(obj, User.class));
+    }
+
+    private void findByEmail(UserDTO obj) {
+        Optional<User> user = repository.findByEmail(obj.getEmail());
+        if (user.isPresent()) {
+            throw new DataIntegrityViolationException("E-mail already registered");
+        }
     }
 }
