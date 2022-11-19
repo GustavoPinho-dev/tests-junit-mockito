@@ -1,6 +1,5 @@
 package br.com.godh.apitests.controllers;
 
-import br.com.godh.apitests.entities.User;
 import br.com.godh.apitests.entities.dto.UserDTO;
 import br.com.godh.apitests.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -25,5 +26,13 @@ public class UserController {
     public ResponseEntity<UserDTO> findById(@PathVariable Integer id) {
 
         return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> findAll() {
+        return ResponseEntity.ok().body(service.findAll()
+                        .stream()
+                        .map(x -> mapper.map(x, UserDTO.class))
+                        .toList());
     }
 }
