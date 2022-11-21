@@ -3,6 +3,7 @@ package br.com.godh.apitests.services.impl;
 import br.com.godh.apitests.entities.User;
 import br.com.godh.apitests.entities.dto.UserDTO;
 import br.com.godh.apitests.repositories.UserRepository;
+import br.com.godh.apitests.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -55,6 +56,18 @@ class UserServiceImplTest {
         assertEquals(NAME, response.getName());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAnObjectNotFoundException() {
+        when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundException("Object not found"));
+
+        try {
+            service.findById(ID);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals("Object not found", ex.getMessage());
+        }
     }
 
     @Test
