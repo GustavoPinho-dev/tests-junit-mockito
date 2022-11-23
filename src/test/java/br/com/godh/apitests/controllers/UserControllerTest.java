@@ -30,8 +30,6 @@ class UserControllerTest {
     public static final String NAME     = "Gustavo";
     public static final String EMAIL    = "gustavo@email.com";
     public static final String PASSWORD = "12345";
-    public static final String OBJECT_NOT_FOUND = "Object not found";
-    public static final String E_MAIL_ALREADY_REGISTERED = "E-mail already registered";
 
     @InjectMocks
     private UserController controller;
